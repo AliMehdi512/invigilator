@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invigilator - AI Exam Monitoring Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Neon Futuristic Color Palette */
+            --primary-neon-cyan: #00FFFF;
+            --primary-neon-blue: #0080FF;
+            --primary-neon-magenta: #FF00FF;
+            --primary-neon-green: #00FF00;
+            --primary-neon-orange: #FF8000;
+            --primary-neon-red: #FF0040;
+            
+            /* Secondary Neon Colors */
+            --secondary-electric-blue: #00BFFF;
+            --secondary-electric-purple: #8A2BE2;
+            --secondary-electric-lime: #32CD32;
+            --secondary-electric-pink: #FF1493;
+            
+            /* Alert Severity Colors */
+            --alert-critical: #FF0040;
+            --alert-warning: #FF8000;
+            --alert-info: #00FFFF;
+            --alert-success: #00FF00;
+            --alert-normal: #0080FF;
+            
+            /* Dark Background System */
+            --bg-primary: #0A0A0F;
+            --bg-secondary: #1A1A2E;
+            --bg-tertiary: #16213E;
+            --bg-card: #1E1E3F;
+            --bg-glass: rgba(26, 26, 46, 0.8);
+            
+            /* Text Colors */
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-muted: #808080;
+            --text-accent: #00FFFF;
+            
+            /* Border & Effects */
+            --border-neon: #00FFFF;
+            --border-subtle: rgba(0, 255, 255, 0.3);
+            --glow-primary: 0 0 20px rgba(0, 255, 255, 0.5);
+            --glow-secondary: 0 0 15px rgba(255, 0, 255, 0.3);
+            --glow-success: 0 0 15px rgba(0, 255, 0, 0.4);
+            --glow-warning: 0 0 15px rgba(255, 128, 0, 0.4);
+            --glow-danger: 0 0 15px rgba(255, 0, 64, 0.4);
+            
+            /* Spacing System */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            
+            /* Typography */
+            --font-primary: 'Orbitron', monospace;
+            --font-secondary: 'Inter', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            --font-size-4xl: 2.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 128, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Enterprise Header */
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-neon-cyan), var(--primary-neon-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-primary);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: var(--glow-primary); }
+            50% { box-shadow: var(--glow-secondary); }
+        }
+
+        .brand-logo i {
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-neon-cyan), var(--primary-neon-blue), var(--primary-neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-xs);
+        }
+
+        .subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 25px;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-neon-green);
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Content Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-xl);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-2xl);
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Monitoring Section */
+        .monitoring-section {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .monitoring-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-neon-cyan), var(--primary-neon-blue), var(--primary-neon-magenta), transparent);
+            animation: borderFlow 3s linear infinite;
+        }
+
+        @keyframes borderFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-neon-cyan), var(--primary-neon-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-primary);
+        }
+
+        .section-icon i {
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        /* Video Container */
+        .video-container {
+            width: 100%;
+            height: 400px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: var(--space-xl);
+        }
+
+        .video-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .video-placeholder i {
+            font-size: 48px;
+            margin-bottom: var(--space-lg);
+            color: var(--primary-neon-cyan);
+        }
+
+        .placeholder-text {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .placeholder-subtext {
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+        }
+
+        /* Enterprise Buttons */
+        .button-container {
+            display: flex;
+            gap: var(--space-lg);
+            justify-content: center;
+        }
+
+        .btn-enterprise {
+            padding: var(--space-lg) var(--space-2xl);
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font-secondary);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary-neon-green), var(--secondary-electric-lime));
+            color: var(--bg-primary);
+            box-shadow: var(--glow-success);
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, var(--primary-neon-red), var(--secondary-electric-pink));
+            color: var(--text-primary);
+            box-shadow: var(--glow-danger);
+        }
+
+        .btn-stop:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 0, 64, 0.6);
+        }
+
+        .btn-enterprise:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Analytics Panel */
+        .analytics-panel {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analytics-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-neon-magenta), var(--primary-neon-orange), var(--primary-neon-red), transparent);
+            animation: borderFlow 3s linear infinite reverse;
+        }
+
+        /* Session Timer */
+        .session-timer {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-tertiary));
+            border: 1px solid var(--border-subtle);
+            border-radius: 15px;
+            padding: var(--space-xl);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .session-timer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: timerGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes timerGlow {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .timer-header {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+        }
+
+        .timer-display {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--primary-neon-cyan);
+            text-shadow: var(--glow-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .timer-subtitle {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Analytics Items */
+        .analytics-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg) 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .analytics-item:last-child {
+            border-bottom: none;
+        }
+
+        .analytics-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .analytics-label i {
+            width: 20px;
+            color: var(--primary-neon-cyan);
+        }
+
+        .analytics-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 20px;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-ready {
+            background: rgba(0, 128, 255, 0.2);
+            color: var(--primary-neon-blue);
+            border: 1px solid var(--primary-neon-blue);
+        }
+
+        .status-monitoring {
+            background: rgba(0, 255, 0, 0.2);
+            color: var(--primary-neon-green);
+            border: 1px solid var(--primary-neon-green);
+            animation: alertPulse 2s ease-in-out infinite;
+        }
+
+        .status-alert {
+            background: rgba(255, 0, 64, 0.2);
+            color: var(--primary-neon-red);
+            border: 1px solid var(--primary-neon-red);
+            animation: alertPulse 1s ease-in-out infinite;
+        }
+
+        .status-warning {
+            background: rgba(255, 128, 0, 0.2);
+            color: var(--primary-neon-orange);
+            border: 1px solid var(--primary-neon-orange);
+            animation: alertPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes alertPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: var(--space-sm);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-neon-cyan), var(--primary-neon-blue));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Alert System */
+        .alert-system {
+            position: fixed;
+            top: 100px;
+            right: var(--space-xl);
+            z-index: 2000;
+            max-width: 400px;
+        }
+
+        .alert-banner {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .alert-banner.show {
+            transform: translateX(0);
+        }
+
+        .alert-banner.critical {
+            border-left: 4px solid var(--alert-critical);
+        }
+
+        .alert-banner.warning {
+            border-left: 4px solid var(--alert-warning);
+        }
+
+        .alert-banner.success {
+            border-left: 4px solid var(--alert-success);
+        }
+
+        .alert-banner.info {
+            border-left: 4px solid var(--alert-info);
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .alert-message {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: var(--space-md);
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+
+            .brand-section {
+                gap: var(--space-md);
+            }
+
+            .brand-text h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .main-container {
+                padding: var(--space-lg) var(--space-md);
+            }
+
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-enterprise {
+                min-width: 100%;
+            }
+
+            .video-container {
+                height: 300px;
+            }
+
+            .timer-display {
+                font-size: var(--font-size-3xl);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-text h1 {
+                font-size: var(--font-size-xl);
+            }
+
+            .section-title {
+                font-size: var(--font-size-xl);
+            }
+
+            .timer-display {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enterprise Header -->
+    <div class="header-container">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="brand-text">
+                <h1>Invigilator</h1>
+                <div class="subtitle">AI-Powered Exam Monitoring Platform</div>
+            </div>
+        </div>
+        <div class="system-status">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>System Online</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Monitoring Section -->
+        <div class="monitoring-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h2 class="section-title">Live Monitoring</h2>
+            </div>
+            
+            <div class="video-container">
+                <img id="videoFeed" class="video-feed" src="" alt="Video Feed" style="display: none;" onerror="this.style.display='none'; document.getElementById('videoPlaceholder').style.display='flex';">
+                <div id="videoPlaceholder" class="video-placeholder">
+                    <i class="fas fa-video"></i>
+                    <div class="placeholder-text">AI System Ready</div>
+                    <div class="placeholder-subtext">Click Start to begin monitoring</div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button id="startBtn" class="btn-enterprise btn-start">
+                    <i class="fas fa-play"></i> Start Monitoring
+                </button>
+                <button id="stopBtn" class="btn-enterprise btn-stop" disabled>
+                    <i class="fas fa-stop"></i> Stop Monitoring
+                </button>
+            </div>
+        </div>
+
+        <!-- Enterprise Analytics Dashboard -->
+        <div class="analytics-panel">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h2 class="section-title">Analytics</h2>
+            </div>
+
+            <!-- Session Timer -->
+            <div class="session-timer">
+                <div class="timer-header">Session Duration</div>
+                <div class="timer-display" id="sessionTime">00:00:00</div>
+                <div class="timer-subtitle">AI System Active</div>
+            </div>
+
+            <!-- Analytics Items -->
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-circle"></i>
+                    <span>System Status</span>
+                </div>
+                <div class="analytics-value">
+                    <span id="statusIndicator" class="status-badge status-ready">Ready</span>
+                </div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-user"></i>
+                    <span>Face Detection</span>
+                </div>
+                <div class="analytics-value" id="faceDetected">No</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-venus-mars"></i>
+                    <span>Gender</span>
+                </div>
+                <div class="analytics-value" id="gender">-</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-birthday-cake"></i>
+                    <span>Age Range</span>
+                </div>
+                <div class="analytics-value" id="age">-</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-eye"></i>
+                    <span>Head Pose</span>
+                </div>
+                <div class="analytics-value" id="headPose">Looking Forward</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Violation Count</span>
+                </div>
+                <div class="analytics-value" id="illegalMovements">0</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-clock"></i>
+                    <span>Violation Time</span>
+                </div>
+                <div class="analytics-value" id="illegalTime">0s</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Risk Level</span>
+                </div>
+                <div class="analytics-value" id="riskLevel">Low</div>
+            </div>
+
+            <div class="analytics-item">
+                <div class="analytics-label">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Integrity Score</span>
+                </div>
+                <div class="analytics-value">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="integrityScore" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert System -->
+    <div class="alert-system">
+        <div id="alertBanner" class="alert-banner">
+            <i class="fas fa-info-circle alert-icon"></i>
+            <div class="alert-content">
+                <div class="alert-title">Information</div>
+                <div class="alert-message" id="alertMessage">System ready for monitoring</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ExamMonitor {
+            constructor() {
+                this.isRunning = false;
+                this.startTime = null;
+                this.updateInterval = null;
+                this.statusInterval = null;
+                
+                // DOM elements
+                this.startBtn = document.getElementById('startBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.videoFeed = document.getElementById('videoFeed');
+                this.videoPlaceholder = document.getElementById('videoPlaceholder');
+                this.sessionTime = document.getElementById('sessionTime');
+                this.statusIndicator = document.getElementById('statusIndicator');
+                this.alertBanner = document.getElementById('alertBanner');
+                this.alertMessage = document.getElementById('alertMessage');
+                
+                // Analytics elements
+                this.faceDetected = document.getElementById('faceDetected');
+                this.gender = document.getElementById('gender');
+                this.age = document.getElementById('age');
+                this.headPose = document.getElementById('headPose');
+                this.illegalMovements = document.getElementById('illegalMovements');
+                this.illegalTime = document.getElementById('illegalTime');
+                this.riskLevel = document.getElementById('riskLevel');
+                this.integrityScore = document.getElementById('integrityScore');
+                
+                // Event listeners
+                this.startBtn.addEventListener('click', () => this.startMonitoring());
+                this.stopBtn.addEventListener('click', () => this.stopMonitoring());
+                
+                // Initialize
+                this.updateUI();
+            }
+            
+            async startMonitoring() {
+                try {
+                    const response = await fetch('https://ali578-invigilator-backend.hf.space/start', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.isRunning = true;
+                        this.startTime = Date.now();
+                        this.updateUI();
+                        this.startUpdates();
+                        this.showAlert('Monitoring started successfully', 'success');
+                    } else {
+                        this.showAlert('Failed to start monitoring', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Error starting monitoring:', error);
+                    this.showAlert('Connection error. Please check backend URL.', 'critical');
+                }
+            }
+            
+            async stopMonitoring() {
+                try {
+                    const response = await fetch('https://ali578-invigilator-backend.hf.space/stop', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.isRunning = false;
+                        this.startTime = null;
+                        this.updateUI();
+                        this.stopUpdates();
+                        this.showAlert('Monitoring stopped', 'info');
+                    } else {
+                        this.showAlert('Failed to stop monitoring', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Error stopping monitoring:', error);
+                    this.showAlert('Connection error', 'critical');
+                }
+            }
+            
+            updateUI() {
+                if (this.isRunning) {
+                    this.startBtn.disabled = true;
+                    this.stopBtn.disabled = false;
+                    this.videoFeed.style.display = 'block';
+                    this.videoPlaceholder.style.display = 'none';
+                    
+                    // Force reload the video feed with cache busting
+                    const timestamp = new Date().getTime();
+                    this.videoFeed.src = `https://ali578-invigilator-backend.hf.space/video_feed?t=${timestamp}`;
+                    
+                    // Add error handling
+                    this.videoFeed.onerror = () => {
+                        console.error('Video feed error');
+                        this.videoFeed.style.display = 'none';
+                        this.videoPlaceholder.style.display = 'flex';
+                    };
+                    
+                    this.videoFeed.onload = () => {
+                        console.log('Video feed loaded successfully');
+                    };
+                } else {
+                    this.startBtn.disabled = false;
+                    this.stopBtn.disabled = true;
+                    this.videoFeed.style.display = 'none';
+                    this.videoPlaceholder.style.display = 'flex';
+                }
+            }
+            
+            startUpdates() {
+                // Update session timer
+                this.updateInterval = setInterval(() => {
+                    if (this.startTime) {
+                        const elapsed = Date.now() - this.startTime;
+                        const hours = Math.floor(elapsed / 3600000);
+                        const minutes = Math.floor((elapsed % 3600000) / 60000);
+                        const seconds = Math.floor((elapsed % 60000) / 1000);
+                        this.sessionTime.textContent = 
+                            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+                
+                // Update status
+                this.statusInterval = setInterval(() => {
+                    this.updateStatus();
+                }, 1000);
+            }
+            
+            stopUpdates() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                    this.updateInterval = null;
+                }
+                if (this.statusInterval) {
+                    clearInterval(this.statusInterval);
+                    this.statusInterval = null;
+                }
+                this.sessionTime.textContent = '00:00:00';
+            }
+            
+            async updateStatus() {
+                try {
+                    const response = await fetch('https://ali578-invigilator-backend.hf.space/status');
+                    const stats = await response.json();
+                    this.updateStats(stats);
+                } catch (error) {
+                    console.error('Error updating status:', error);
+                }
+            }
+            
+            updateStats(stats) {
+                // Update status indicator
+                this.statusIndicator.className = 'status-badge';
+                if (stats.current_status === 'Monitoring') {
+                    this.statusIndicator.classList.add('status-monitoring');
+                } else if (stats.current_status.includes('Alert') || stats.current_status.includes('Multiple')) {
+                    this.statusIndicator.classList.add('status-alert');
+                } else if (stats.current_status.includes('Warning') || stats.current_status.includes('Out of')) {
+                    this.statusIndicator.classList.add('status-warning');
+                } else {
+                    this.statusIndicator.classList.add('status-ready');
+                }
+                
+                this.statusIndicator.textContent = stats.current_status;
+                
+                // Update analytics
+                this.faceDetected.textContent = stats.face_detected ? 'Yes' : 'No';
+                this.gender.textContent = stats.gender || '-';
+                this.age.textContent = stats.age || '-';
+                this.headPose.textContent = stats.head_pose || 'Looking Forward';
+                this.illegalMovements.textContent = stats.illegal_movements || 0;
+                this.illegalTime.textContent = `${Math.round(stats.illegal_time || 0)}s`;
+                this.riskLevel.textContent = stats.risk_level || 'Low';
+                
+                // Update integrity score (inverse of violations)
+                const violations = stats.illegal_movements || 0;
+                const score = Math.max(0, 100 - (violations * 10));
+                this.integrityScore.style.width = `${score}%`;
+                
+                // Update risk level color
+                this.riskLevel.className = 'analytics-value';
+                if (stats.risk_level === 'High') {
+                    this.riskLevel.style.color = 'var(--primary-neon-red)';
+                } else if (stats.risk_level === 'Medium') {
+                    this.riskLevel.style.color = 'var(--primary-neon-orange)';
+                } else {
+                    this.riskLevel.style.color = 'var(--primary-neon-green)';
+                }
+            }
+            
+            showAlert(message, type = 'info') {
+                this.alertMessage.textContent = message;
+                this.alertBanner.className = `alert-banner show ${type}`;
+                
+                // Update alert icon based on type
+                const alertIcon = this.alertBanner.querySelector('.alert-icon');
+                const alertTitle = this.alertBanner.querySelector('.alert-title');
+                
+                switch(type) {
+                    case 'critical':
+                        alertIcon.className = 'fas fa-exclamation-triangle alert-icon';
+                        alertTitle.textContent = 'Critical Alert';
+                        break;
+                    case 'warning':
+                        alertIcon.className = 'fas fa-exclamation-circle alert-icon';
+                        alertTitle.textContent = 'Warning';
+                        break;
+                    case 'success':
+                        alertIcon.className = 'fas fa-check-circle alert-icon';
+                        alertTitle.textContent = 'Success';
+                        break;
+                    case 'info':
+                    default:
+                        alertIcon.className = 'fas fa-info-circle alert-icon';
+                        alertTitle.textContent = 'Information';
+                        break;
+                }
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    this.alertBanner.classList.remove('show');
+                }, 5000);
+            }
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new ExamMonitor();
+        });
+    </script>
+</body>
+</html>
