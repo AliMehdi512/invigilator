@@ -1,4 +1,4 @@
-# Invigilator Frontend
+# Invigilator
 
 AI-Powered Exam Monitoring System Frontend
 
